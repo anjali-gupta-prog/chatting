@@ -1,0 +1,71 @@
+<script src="js/socket.io.js"> </script>
+<script src="js/jquey.js"> </script>
+<form onsubmit="return sendMessage();">
+    <input id="message" placeholder="enter message">
+    <input type="submit" value="send">
+</form>
+<ul id="msg">
+
+</ul>
+<script>
+    var server = "http://localhost:4141" ;
+    var io = io(server);
+
+    function sendMessage()
+    {
+        var msg= document.getElementById('message');
+        //send event to server
+        io.emit("new_message", msg.value);
+        return false;
+    }
+
+        
+    $.ajax({
+        url : server+"/get_message",
+        method : "GET",
+        success : function(response){
+            console.log(response);
+            var message = document.getElementById("msg");
+            var data = JSON.parse(response);
+            for(var a=0;a<data.length;a++)
+            {
+                var li = document.createElement("li");
+                //get unique id
+                li.id = "message-"+data[a].id;
+                 li.innerHTML = data[a].message;
+                 li.innerHTML += "<button data-id='"+data[a].id+"' onclick='deleteuser(this);'> Delete </button>";
+                 message.appendChild(li);
+            }
+        }
+
+    });
+
+    function deleteuser(id)
+    {
+        var id1= id.getAttribute("data-id");
+        console.log('ji'+id1);
+
+        io.emit("delete_message",id1);
+    } 
+    
+    //atach listener on client
+    io.on("delete_message", function(id){
+        // get node by id
+            var node=document.getElementById('message-'+id);
+            node.innerHTML = "Message has been deleted"; 
+    });
+
+
+    // client will listen all message from server
+    io.on("new_message", function(data){
+        console.log("Server Says", data);
+
+        //display message  
+        var li = document.createElement("li");
+        li.innerHTML = data;
+        var message = document.getElementById("msg");
+        message.appendChild(li);
+    });
+
+    
+</script>
