@@ -14,9 +14,9 @@ var io= require('socket.io')(server);
 
 var connection = mysql.createConnection({
     host : "localhost",
-    user : "root",
-    password : "",
-    database : "node_web_chat"
+    user : "u285047795_nodechat",
+    password : "Nodechat@321",
+    database : "u285047795_nodechat"
 });
 
 connection.connect(function (error){
