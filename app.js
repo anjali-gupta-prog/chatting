@@ -13,7 +13,7 @@ var io= require('socket.io')(server);
 
 
 var connection = mysql.createConnection({
-    host : "localhost",
+    host : "185.201.11.224",
     user : "u285047795_nodechat",
     password : "Nodechat@321",
     database : "u285047795_nodechat"
